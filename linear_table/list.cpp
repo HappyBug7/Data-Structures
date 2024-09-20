@@ -10,9 +10,11 @@ int main() {
 	my_list1.push_back("happybug");
 	my_list2.push_back("cool");
 	my_list2.push_back("really?");
-	LinearList<Array, std::string>* my_list_new = LinearList<Array, std::string>::merge(my_list1, my_list2); 
-	my_list_new->sort("quick");
-	"is ok?" >> *my_list_new;
-	std::cout << *my_list_new << std::endl;
-//	my_list_new->print_list();
+	LinearList<Array, std::string> my_list_new(10); 
+	LinearList<Array, std::string> temp = my_list1 + my_list2; 
+	my_list_new = temp;
+	std::cout << temp << std::endl;
+	std::cout << my_list_new << std::endl;
+	std::cout << my_list1 << std::endl;
+	std::cout << my_list2[1] << std::endl;
 }

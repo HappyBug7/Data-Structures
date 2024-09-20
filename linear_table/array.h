@@ -78,7 +78,7 @@ public:
 
   T index(int idx) {
     if (!is_index_valid(idx)) {
-      return -1;
+      return T();
     }
     return arr[idx];
   }
@@ -175,8 +175,19 @@ public:
     }
     L -> size = size;
   }
+
+  static void duplicate(Array<T>* from, Array<T>* to) {
+    int min = from -> size;
+    if (from -> size > to -> capasity) {
+      min = to -> capasity;
+    }
+    for (int i = 0; i< min; i++) {
+      to -> arr[i] = from -> arr[i];
+    }
+    to -> size = from -> size;
+  }
   
-  static Array<T>* merge(Array* L1, Array* L2) {
+  static Array<T>* merge(const Array<T>* L1, const Array<T>* L2) {
     int capasity_new = L1 -> capasity + L2 -> capasity;
     int size_new = L1 -> size + L2 -> size;
     Array<T>* L_new = new Array<T>(capasity_new);

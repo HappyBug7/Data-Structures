@@ -124,6 +124,18 @@ public:
   }
 
   /**
+   * @brief get the value of the element at idx
+   * @param idx the index
+   */
+  T index(int idx) {
+    return linear_list -> index(idx);
+  }
+  T operator[](int idx) {
+    return index(idx);
+  }
+
+
+  /**
    * @brief print the whole list, and the form will differ between different storage structure
    */
   void print_list() {
@@ -141,13 +153,13 @@ public:
   void duplicate(const LinearList& L) {
     linear_list -> duplicate(L.linear_list);
   }
-  static void duplicate(const LinearList& from, const LinearList& to) {
-    StorageStructure<T>::duplicate(from, to);
+  static void duplicate(const LinearList& from, LinearList& to) {
+    StorageStructure<T>::duplicate(from.linear_list, to.linear_list);
   }
 
   LinearList& operator=(const LinearList& L) {
     if (this != &L) {
-      duplicate(L);
+      LinearList<StorageStructure, T>::duplicate(L, *this);
     }
     return *this;
   }
@@ -160,6 +172,9 @@ public:
   static LinearList<StorageStructure, T>* merge(LinearList<StorageStructure, T> L1, LinearList<StorageStructure, T> L2) {
     StorageStructure<T>* linear_list_new = StorageStructure<T>::merge(L1.linear_list, L2.linear_list);
     return new LinearList(linear_list_new);
+  }
+  LinearList operator+(LinearList& other) {
+    return *merge(*this, other);
   }
 
   /**

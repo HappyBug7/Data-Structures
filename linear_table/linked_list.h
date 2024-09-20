@@ -46,7 +46,7 @@ public:
     if (is_index_valid(idx-1)) {
       return T();
     }
-    Node* node = index(idx-1);
+    Node* node = index_node(idx-1);
     return node -> val;
   }
 
@@ -54,7 +54,7 @@ public:
     if (is_index_valid(idx+1)) {
       return T();
     }
-    Node* node = index(idx+1);
+    Node* node = index_node(idx+1);
     return node -> val;
   }
 
@@ -103,7 +103,7 @@ public:
     }
   }
 
-  Node* index(int idx) {
+  Node* index_node(int idx) {
     if (!is_index_valid(idx)) {
       return NULL;
     }
@@ -114,6 +114,19 @@ public:
       idx_curr++;
     }
     return curr;
+  }
+
+  T index(int idx) {
+    if (!is_index_valid(idx)) {
+      return NULL;
+    }
+    int idx_curr = 0;
+    Node* curr = dummy_head -> next;
+    while (idx_curr < idx) {
+      curr = curr -> next;
+      idx_curr++;
+    }
+    return curr -> val;
   }
 
   int search(T val) {
@@ -186,7 +199,7 @@ public:
       push_front(val);
       return;
     }
-    Node* prev = index(idx-1);
+    Node* prev = index_node(idx-1);
     if (idx == size) {
       prev -> next = new Node(val);
     } else {
@@ -199,7 +212,7 @@ public:
     if (!is_index_valid(idx)) {
       return;
     }
-    Node* node = index(idx);
+    Node* node = index_node(idx);
     node -> val = val;
   }
 
@@ -217,7 +230,7 @@ public:
       size--;
       return;
     }
-    Node* prev_tail = index(size - 2);
+    Node* prev_tail = index_node(size - 2);
     delete prev_tail -> next;
     prev_tail -> next = NULL;
     size--;
@@ -231,7 +244,7 @@ public:
       pop_back();
       return;
     }
-    Node* prev = index(idx-1);
+    Node* prev = index_node(idx-1);
     Node* node = prev -> next;
     Node* next = node -> next;
     delete node;
@@ -266,7 +279,18 @@ public:
     L -> size = size;
   }
 
-  static LinkedList* merge(LinkedList* L1, LinkedList* L2) {
+  static void duplicate(LinkedList<T>* from, LinkedList<T> to) {
+    Node* curr = from -> dummy_head -> next;
+    Node* next = to -> dummy_head;
+    while(curr != NULL) {
+      next -> next = new Node(curr -> val);
+      next = next -> next;
+      curr = curr -> next;
+    }
+    to -> size = from -> size;
+  }
+
+  static LinkedList<T>* merge(const LinkedList<T>* L1, LinkedList<T>* L2) {
     int size_new = L1 -> size + L2 -> size;
     Node* L1_tail = L1 -> get_tail();
     L1_tail -> next = L2 -> dummy_head -> next;
@@ -288,7 +312,7 @@ public:
       duplicate(L2);
       return;
     }
-    Node* node = index(idx-1);
+    Node* node = index_node(idx-1);
     L2->dummy_head->next = node->next;
     node -> next = NULL;
     L1 -> dummy_head -> next = dummy_head -> next;
