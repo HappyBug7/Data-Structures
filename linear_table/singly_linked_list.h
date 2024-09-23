@@ -1,7 +1,7 @@
 #include <type_traits>
 
 template<typename T>
-class LinkedList {
+class SLList {
 private:
   class Node {
   public:
@@ -19,9 +19,9 @@ private:
   }
   
 public:
-  LinkedList() : dummy_head(new Node()), size(0) {}
-  LinkedList(int capasity) : dummy_head(new Node()), size(0) {}
-  // LinkedList(T val) : dummy_head(new Node()), size(1) {
+  SLList() : dummy_head(new Node()), size(0) {}
+  SLList(int capasity) : dummy_head(new Node()), size(0) {}
+  // SLList(T val) : dummy_head(new Node()), size(1) {
   //   Node* first = new Node(val);
   //   dummy_head->next = first;
   // };
@@ -35,6 +35,14 @@ public:
   } 
 
   Node* get_tail() {
+    Node* tail = dummy_head;
+    while (tail -> next != NULL) {
+      tail = tail -> next;
+    } 
+    return tail;
+  }
+
+  Node* get_tail() const {
     Node* tail = dummy_head;
     while (tail -> next != NULL) {
       tail = tail -> next;
@@ -268,7 +276,7 @@ public:
     size--;
   }
 
-  void duplicate(LinkedList* L) {
+  void duplicate(SLList* L) {
     Node* curr = dummy_head -> next;
     Node* next = L -> dummy_head;
     while(curr != NULL) {
@@ -279,7 +287,7 @@ public:
     L -> size = size;
   }
 
-  static void duplicate(LinkedList<T>* from, LinkedList<T> to) {
+  static void duplicate(SLList<T>* from, SLList<T>* to) {
     Node* curr = from -> dummy_head -> next;
     Node* next = to -> dummy_head;
     while(curr != NULL) {
@@ -290,17 +298,24 @@ public:
     to -> size = from -> size;
   }
 
-  static LinkedList<T>* merge(const LinkedList<T>* L1, LinkedList<T>* L2) {
-    int size_new = L1 -> size + L2 -> size;
-    Node* L1_tail = L1 -> get_tail();
-    L1_tail -> next = L2 -> dummy_head -> next;
-    L1 -> size = size_new;
-    return L1;
+  static SLList<T>* merge(const SLList<T>* L1, const SLList<T>* L2) {
+    SLList<T>* new_list = new SLList();
+    Node* curr = L1->dummy_head->next;
+    for (int i = 0; i< L1->size; i++) {
+      new_list->push_back(curr->val);
+      curr = curr->next;
+    }
+    curr = L2->dummy_head->next;
+    for (int i = 0; i< L2->size; i++) {
+      new_list->push_back(curr->val);
+      curr = curr->next;
+    }
+    return new_list;
   }
 
-  void dispose(LinkedList*& L1, LinkedList*& L2, int idx) {
+  void dispose(SLList*& L1, SLList*& L2, int idx) {
     if (idx == size) {
-      L1 = new LinkedList();
+      L1 = new SLList();
       duplicate(L1);
       return;
     }
@@ -308,7 +323,7 @@ public:
       return;
     }
     if (idx == 0) {
-      L2 = new LinkedList();
+      L2 = new SLList();
       duplicate(L2);
       return;
     }

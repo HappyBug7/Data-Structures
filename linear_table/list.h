@@ -1,5 +1,6 @@
 #include<iostream>
-#include"linked_list.h"
+#include"singly_linked_list.h"
+#include"doubly_linked_list.h"
 #include"array.h"
 
 template<template<typename> class StorageStructure, typename T>
